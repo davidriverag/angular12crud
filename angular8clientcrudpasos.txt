@@ -1,0 +1,93 @@
+Crear Angular Project 
+ng new Angular12ClientCrud  
+Yes
+CSS
+
+Crear Servicio
+ng g s services/tutorial
+Crear Components
+
+ng g c components/add-tutorial
+ng g c components/tutorial-details
+ng g c components/tutorials-list
+ng g class models/tutorial --type=model
+
+en archivo app.modules.ts agregar
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+agregar en app-routing.module.ts
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
+import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
+const routes: Routes = [
+  { path: '', redirectTo: 'tutorials', pathMatch: 'full' },
+  { path: 'tutorials', component: TutorialsListComponent },
+  { path: 'tutorials/:id', component: TutorialDetailsComponent },
+  { path: 'add', component: AddTutorialComponent }
+];
+
+
+
+agregar en src/app.component.html
+ <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <a href="#" class="navbar-brand">bezKoder</a>
+    <div class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a routerLink="tutorials" class="nav-link">Tutorials</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="add" class="nav-link">Add</a>
+      </li>
+    </div>
+  </nav>
+
+
+
+modificar services/tutorial.service.ts
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+const baseUrl = 'http://localhost:8080/api/tutorials';
+@Injectable({
+  providedIn: 'root'
+})
+export class TutorialService {
+  constructor(private http: HttpClient) { }
+  getAll() {
+    return this.http.get(baseUrl);
+  }
+  get(id) {
+    return this.http.get(`${baseUrl}/${id}`);
+  }
+  create(data) {
+    return this.http.post(baseUrl, data);
+  }
+  update(id, data) {
+    return this.http.put(`${baseUrl}/${id}`, data);
+  }
+  delete(id) {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+  deleteAll() {
+    return this.http.delete(baseUrl);
+  }
+  findByTitle(title) {
+    return this.http.get(`${baseUrl}?title=${title}`);
+  }
+}
+
+
+modificar add-tutorial.component.ts
+modificar components/add-tutorial/add-tutorial.component.html
+
+modificar components/tutorials-list/tutorials-list.component.ts
+modificar components/tutorials-list/tutorials-list.component.html
+
+modificar components/tutorial-details/tutorial-details.component.ts
+modificar components/tutorial-details/tutorial-details.component.html
+
+ejectutar aplicacion con 
+ng serve --port 8081
